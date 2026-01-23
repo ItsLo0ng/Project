@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Font;
 
 class ChirpController extends Controller
 {
 
     public function index()
     {
-        // dd(config('backpack.ui.view_namespace'));
-
-        return view('welcome');
+        // $fonts = Font::with('category', 'user', 'images', 'files', 'feedbacks')
+        //             ->latest()
+        //             ->paginate(10);
+        // return view('welcome', compact('fonts')); // or 'home'
+        return view('home');
     }
 }
