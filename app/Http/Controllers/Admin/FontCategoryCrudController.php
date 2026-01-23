@@ -37,14 +37,23 @@ class FontCategoryCrudController extends CrudController
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
+
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        $this->crud->column('id')->type('number');
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        $this->crud->column('name')
+                ->label('Category Name')
+                ->type('text');
+
+        $this->crud->column('description')
+                ->label('Description')
+                ->type('textarea')
+                ->limit(120);
+
+        $this->crud->column('created_at')
+                ->label('Created')
+                ->type('datetime');
     }
 
     /**
@@ -55,13 +64,17 @@ class FontCategoryCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(FontCategoryRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+        $this->crud->setValidation();
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        $this->crud->field('name')
+                ->label('Category Name')
+                ->type('text')
+                ->required(true);
+
+        $this->crud->field('description')
+                ->label('Description')
+                ->type('textarea')
+                ->hint('Optional short description of this category');
     }
 
     /**

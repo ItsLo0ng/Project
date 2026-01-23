@@ -39,12 +39,28 @@ class UserCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        $this->crud->column('id')->type('number');
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        $this->crud->column('name')
+                ->label('Full Name')
+                ->type('text');
+
+        $this->crud->column('email')
+                ->label('Email')
+                ->type('email');
+
+        // $this->crud->column('username')
+        //         ->label('Username')
+        //         ->type('text');
+
+        $this->crud->column('role')
+                ->label('Role')
+                ->type('select_from_array')
+                ->options(['user' => 'User', 'admin' => 'Admin']);
+
+        $this->crud->column('created_at')
+                ->label('Registered')
+                ->type('datetime');
     }
 
     /**
@@ -55,13 +71,36 @@ class UserCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(UserRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+        $this->crud->setValidation();
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        $this->crud->field('name')
+                ->label('Full Name')
+                ->type('text')
+                ->required(true);
+
+        // $this->crud->field('username')
+        //         ->label('Username')
+        //         ->type('text')
+        //         ->required(true)
+        //         ->hint('Used for login if email is not preferred');
+
+        $this->crud->field('email')
+                ->label('Email')
+                ->type('email')
+                ->required(true);
+
+        $this->crud->field('password')
+                ->label('Password')
+                ->type('password')
+                ->required(true)
+                ->hint('Minimum 8 characters');
+
+        $this->crud->field('role')
+                ->label('Role')
+                ->type('select_from_array')
+                ->options(['user' => 'User', 'admin' => 'Admin'])
+                ->default('user')
+                ->required(true);
     }
 
     /**
@@ -72,6 +111,13 @@ class UserCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+        $this->crud->removeField('password'); // don't show by default
+
+        $this->crud->addField([
+            'name'  => 'password',
+            'label' => 'New Password (leave empty to keep current)',
+            'type'  => 'password',
+            'hint'  => 'Only fill if you want to change password',
+        ]);
     }
 }

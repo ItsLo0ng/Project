@@ -39,12 +39,44 @@ class FontCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        $this->crud->column('id')->type('number');
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        $this->crud->column('name')
+                ->label('Font Name')
+                ->type('text');
+
+        $this->crud->addColumn([
+            'name'      => 'category.name',
+            'label'     => 'Category',
+            'type'      => 'text',
+            'searchLogic' => function ($q, $column, $search) {
+                $q->orWhereHas('category', function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%");
+                });
+            },
+        ]);
+
+        $this->crud->column('designer')
+                ->label('Designer')
+                ->type('text');
+
+        $this->crud->column('date_added')
+                ->label('Date Added')
+                ->type('date');
+
+        $this->crud->addColumn([
+            'name'      => 'user.name',
+            'label'     => 'Uploaded by',
+            'type'      => 'text',
+        ]);
+
+        // Optional: show number of files / images
+        $this->crud->addColumn([
+            'name'      => 'files_count',
+            'label'     => 'Files',
+            'type'      => 'number',
+            'value'     => fn($entry) => $entry->files()->count(),
+        ]);
     }
 
     /**
@@ -55,13 +87,44 @@ class FontCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(FontRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+        $this->crud->setValidation();
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        $this->crud->field('name')
+                ->label('Font Name')
+                ->type('text')
+                ->required(true);
+
+        $this->crud->addField([
+            'name'        => 'category_id',
+            'label'       => 'Category',
+            'type'        => 'select',          
+            'entity'      => 'category',
+            'attribute'   => 'name',
+            'model'       => 'App\Models\FontCategory',
+            'wrapper'     => ['class' => 'form-group col-md-6'],
+            'allows_null' => false,            
+            'default'     => null,
+        ]);
+
+        $this->crud->field('designer')
+                ->label('Designer / Author')
+                ->type('text');
+
+        $this->crud->field('description')
+                ->label('Description')
+                ->type('textarea')
+                ->hint('You can use rich text formatting');
+
+        $this->crud->field('date_added')
+                ->label('Date Added')
+                ->type('datetime')
+                ->default(now()->format('Y-m-d'))
+                ->required(true);
+
+        // Hidden – current logged-in user
+        $this->crud->field('user_id')
+                ->type('hidden')
+                ->value(backpack_user()->id);
     }
 
     /**
