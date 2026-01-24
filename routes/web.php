@@ -7,9 +7,14 @@ use App\Http\Controllers\FontController;
 
 
 
-// Route::get('/', function () {
-//     return view('home');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/home', function () {
+    return view('welcome');
+})->name('welcome');
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -26,15 +31,15 @@ require __DIR__.'/auth.php';
 
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [FontController::class, 'dashboard'])->name('dashboard');
-    Route::get('/fonts', [FontController::class, 'index'])->name('fonts.index');
-    Route::get('/fonts/{font}', [FontController::class, 'show'])->name('fonts.show');
-    Route::get('/fonts/create', [FontController::class, 'create'])->name('fonts.create');
-    Route::post('/fonts', [FontController::class, 'store'])->name('fonts.store');
-    Route::post('/fonts/{font}/feedback', [FontController::class, 'storeFeedback'])->name('fonts.feedback');
-});
+// Route::middleware('auth')->group(function () {
+//     Route::get('/dashboard', [FontController::class, 'dashboard'])->name('dashboard');
+//     Route::get('/fonts', [FontController::class, 'index'])->name('fonts.index');
+//     Route::get('/fonts/{font}', [FontController::class, 'show'])->name('fonts.show');
+//     Route::get('/fonts/create', [FontController::class, 'create'])->name('fonts.create');
+//     Route::post('/fonts', [FontController::class, 'store'])->name('fonts.store');
+//     Route::post('/fonts/{font}/feedback', [FontController::class, 'storeFeedback'])->name('fonts.feedback');
+// });
 
-Route::get('/', function () {
-    return redirect()->route('fonts.index'); // homepage redirects to font list
-});
+// use App\Http\Controllers\HomeController;
+
+// Route::get('/', [HomeController::class, 'index'])->name('home');

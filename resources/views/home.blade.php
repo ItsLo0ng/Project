@@ -1,23 +1,19 @@
 @extends('layouts.app')
 
 @section('content')
-    <x-navbar />
-
-    <x-banner />
-
-    <div class="container mx-auto py-8">
-        <h2 class="text-2xl font-bold mb-4">Featured Fonts</h2>
-        <!-- Add font list here (from controller) -->
-        {{-- @foreach ($fonts as $font)
-            <div class="card mb-4 fade-in">
-                <h3>{{ $font->font_name }}</h3>
-                <p>{{ $font->description }}</p>
-                <!-- ... more font details -->
-            </div>
-        @endforeach --}}
+    <div class="container mx-auto py-12">
+        <h1 class="text-4xl font-bold text-center mb-8">Welcome to Font Share</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            @foreach ($featuredFonts as $font)
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h2 class="text-xl font-semibold">{{ $font->font_name }}</h2>
+                    <p class="text-gray-600">{{ Str::limit($font->description, 100) }}</p>
+                    <a href="{{ route('fonts.show', $font) }}" class="mt-4 inline-block text-indigo-600 hover:underline">
+                        View Font →
+                    </a>
+                </div>
+            @endforeach
+        </div>
     </div>
-
-    <x-ticker />
-
-    <x-footer />
 @endsection
