@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Font Share') }}</title>
+    <title>{{ config('app.name', 'Scratchy Nib') }}</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -22,8 +22,8 @@
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <a href="/" class="flex items-center space-x-2">
-                    <img src="{{ asset('images/logo.png') }}" alt="Font Share" class="h-8 w-auto">
-                    <span class="text-xl font-bold text-indigo-700">Font Share</span>
+                    <img src="{{ asset('images/logo.png') }}" alt="Image" class="h-8 w-auto">
+                    <span class="text-xl font-bold text-indigo-700">Scratchy Nib</span>
                 </a>
 
                 <!-- Navigation + right side -->
@@ -31,7 +31,7 @@
                     <!-- Main menu -->
                     <nav class="hidden md:flex space-x-8">
                         <a href="/" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200">Home</a>
-                        <a href="/fonts" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200">Font search</a>
+                        <a href="/fonts" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200">Search</a>
                         <!-- Categories dropdown -->
                         <div class="relative group">
                             <button class="text-gray-700 hover:text-indigo-600 transition-colors duration-200 flex items-center">

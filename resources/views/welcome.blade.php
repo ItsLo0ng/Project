@@ -9,10 +9,10 @@
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 animate-pulse-slow">
-                Font Share
+                Scratchy Nib
             </h1>
             <p class="text-xl md:text-3xl font-light mb-10 max-w-4xl mx-auto">
-                Discover, share, and get feedback on beautiful custom fonts from creators worldwide
+                Discover, share, and get feedback on beautiful custom calligraphy from creators worldwide
             </p>
             {{-- <div class="flex flex-col sm:flex-row justify-center gap-6">
                 <a href="{{ route('fonts.index') ?? '/fonts' }}"
@@ -38,7 +38,7 @@
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-4xl font-bold text-center mb-16 text-gray-800 fade-in">
-                Featured & Popular Fonts
+                Featured & Popular Calligprqhy
             </h2>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
