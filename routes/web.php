@@ -6,15 +6,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FontController; 
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AllFontController;
+use App\Http\Controllers\Dashboard\MyFontController;
+
 
 Route::get('/', function () {
     return view('welcome');
 });
-
 Route::get('/home', function () {
     return view('welcome');
 })->name('welcome');
-
 Route::get('/about', function () {
     return view('about');
 })->name('about');
@@ -26,6 +27,19 @@ Route::get('/about', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::resource('my-fonts', MyFontController::class);
+});
+
+
+// Route::middleware('auth')->group(function () {
+//     Route::get('/dashboard', [MyFontController::class, 'index'])
+//         ->name('dashboard');
+
+//     Route::resource('my-fonts', MyFontController::class)
+//         ->except(['show']);
+// });
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -36,20 +50,16 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 
+Route::get('/fonts', [FontController::class, 'index'])->name('fonts.index');
+Route::get('/fonts/{font}', [FontController::class, 'show'])->name('fonts.show');
 
-
+//login only route
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [FontController::class, 'dashboard'])->name('dashboard');
-    Route::get('/fonts', [FontController::class, 'index'])->name('fonts.index');
-    Route::get('/fonts/{font}', [FontController::class, 'show'])->name('fonts.show');
     Route::get('/fonts/create', [FontController::class, 'create'])->name('fonts.create');
     Route::post('/fonts', [FontController::class, 'store'])->name('fonts.store');
     Route::post('/fonts/{font}/feedback', [FontController::class, 'storeFeedback'])->name('fonts.feedback');
 });
 
-// use App\Http\Controllers\HomeController;
-
-// Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 
@@ -62,3 +72,16 @@ Route::post('/contact', [ContactController::class, 'send'])->name('contact.send'
 
 
 Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+
+
+
+
+
+Route::get('/search', [AllFontController::class, 'search'])
+    ->name('fonts.search');
+
+
+
+Route::view('/articles/history', 'articles.history')->name('articles.history');
+Route::view('/articles/styles', 'articles.styles')->name('articles.styles');
+Route::view('/articles/tools', 'articles.tools')->name('articles.tools');

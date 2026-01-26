@@ -14,73 +14,137 @@
             <p class="text-xl md:text-3xl font-light mb-10 max-w-4xl mx-auto">
                 Discover, share, and get feedback on beautiful custom calligraphy from creators worldwide
             </p>
-            {{-- <div class="flex flex-col sm:flex-row justify-center gap-6">
-                <a href="{{ route('fonts.index') ?? '/fonts' }}"
-                   class="bg-white text-indigo-700 px-10 py-5 rounded-xl font-bold text-xl shadow-lg hover:bg-indigo-50 hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300">
-                    Browse Fonts
-                </a>
-                @auth
-                    <a href="{{ route('fonts.create') ?? '/fonts/create' }}"
-                       class="bg-transparent border-2 border-white text-white px-10 py-5 rounded-xl font-bold text-xl hover:bg-white hover:text-indigo-700 transform hover:-translate-y-1 transition-all duration-300">
-                        Upload Your Font
-                    </a>
-                @else
-                    <a href="{{ route('register') }}"
-                       class="bg-transparent border-2 border-white text-white px-10 py-5 rounded-xl font-bold text-xl hover:bg-white hover:text-indigo-700 transform hover:-translate-y-1 transition-all duration-300">
-                        Join & Start Sharing
-                    </a>
-                @endauth
-            </div> --}}
         </div>
     </section>
 
-    <!-- Featured section (placeholder - we'll replace with real data later) -->
+    <!-- Introduction -->
+    <section class="py-20 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-14 fade-in">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">
+                    The Art of Calligraphy
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Where writing becomes art, and every stroke tells a story
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-gray-700">
+                <div class="fade-in">
+                    <h3 class="text-2xl font-semibold mb-3 text-indigo-600">
+                        ✒ A Timeless Craft
+                    </h3>
+                    <p class="leading-relaxed">
+                        Calligraphy is the visual art of writing, practiced for thousands of years across cultures.
+                        From ancient manuscripts to modern design, it blends precision, rhythm, and expression.
+                    </p>
+                </div>
+
+                <div class="fade-in">
+                    <h3 class="text-2xl font-semibold mb-3 text-indigo-600">
+                        🖌 Many Styles, One Soul
+                    </h3>
+                    <p class="leading-relaxed">
+                        Each culture shaped its own calligraphic voice — Roman serif, Gothic blackletter,
+                        Chinese brush scripts, Arabic calligraphy, and modern experimental forms.
+                    </p>
+                </div>
+
+                <div class="fade-in">
+                    <h3 class="text-2xl font-semibold mb-3 text-indigo-600">
+                        🎨 Calligraphy in the Digital Age
+                    </h3>
+                    <p class="leading-relaxed">
+                        Today, calligraphy lives on through digital fonts, branding, tattoos, posters,
+                        and creative projects — connecting tradition with modern expression.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured section-->
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-4xl font-bold text-center mb-16 text-gray-800 fade-in">
-                Featured & Popular Calligprqhy
+                Articles about Caligraphy
             </h2>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                <!-- Example font card -->
-                <div class="bg-gray-50 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 fade-in">
-                    <div class="h-64 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                        <span class="text-gray-500 text-2xl font-medium">Font Preview</span>
+                <!-- Article Card -->
+                <a href="{{ route('articles.history') }}"
+                class="group bg-gray-50 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 fade-in">
+
+                    <div class="h-56 bg-gradient-to-br from-indigo-100 to-purple-200 flex items-center justify-center">
+                        <span class="text-indigo-700 text-2xl font-semibold">
+                            History
+                        </span>
+                    </div>
+
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2 group-hover:text-indigo-600">
+                            History of Calligraphy
+                        </h3>
+                        <p class="text-gray-600 mb-4">
+                            Explore how calligraphy evolved across ancient civilizations and cultures.
+                        </p>
+                        <span class="text-indigo-600 font-medium">
+                            Read article →
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Styles -->
+                <a href="{{ route('articles.styles') }}" 
+                class="group bg-gray-50 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 fade-in">
+                    <div class="h-56 bg-gradient-to-br from-pink-100 to-red-200 flex items-center justify-center">
+                        <span class="text-pink-700 text-2xl font-semibold">
+                            Styles
+                        </span>
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2">Elegant Roman Serif</h3>
-                        <p class="text-gray-600 mb-4">Perfect for books, magazines, and editorial design</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-500">By Designer X</span>
-                            <span class="text-indigo-600 font-medium">View →</span>
-                        </div>
+                        <h3 class="text-xl font-semibold mb-2 group-hover:text-indigo-600">
+                            Calligraphy Styles
+                        </h3>
+                        <p class="text-gray-600 mb-4">
+                            Discover Roman, Gothic, Brush, Script, and modern calligraphy styles.
+                        </p>
+                        <span class="text-indigo-600 font-medium">Read article →</span>
                     </div>
-                </div>
+                </a>
 
-                <!-- Repeat 3 more times for demo -->
-                <div class="bg-gray-50 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 fade-in">
-                    <div class="h-64 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                        <span class="text-gray-500 text-2xl font-medium">Font Preview</span>
+                <!-- Tools -->
+                <a href="{{ route('articles.tools') }}" 
+                class="group bg-gray-50 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 fade-in">
+                    <div class="h-56 bg-gradient-to-br from-green-100 to-teal-200 flex items-center justify-center">
+                        <span class="text-green-700 text-2xl font-semibold">
+                            Tools
+                        </span>
                     </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-2">Modern Chinese Brush</h3>
-                        <p class="text-gray-600 mb-4">Traditional yet contemporary calligraphy style</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-500">By Artist Y</span>
-                            <span class="text-indigo-600 font-medium">View →</span>
-                        </div>
+                        <h3 class="text-xl font-semibold mb-2 group-hover:text-indigo-600">
+                            Tools & Materials
+                        </h3>
+                        <p class="text-gray-600 mb-4">
+                            Learn about traditional pens, nibs, brushes, ink, and digital tools for calligraphers.
+                        </p>
+                        <span class="text-indigo-600 font-medium">Read article →</span>
                     </div>
-                </div>
-
-                <!-- Add 2 more similar cards -->
+                </a>
             </div>
 
-            {{-- <div class="text-center mt-12">
-                <a href="{{ route('fonts.index') ?? '/fonts' }}"
+            <div class="text-center mt-12">
+                <a href="/search"
                    class="text-indigo-600 hover:text-indigo-800 font-medium text-lg">
-                    See All Fonts →
+                    Search for Calligraphy →
                 </a>
-            </div> --}}
+                <br>
+                <br>
+                <a href="{{ route('register') ?? '/register' }}"
+                   class="text-indigo-600 hover:text-indigo-800 font-medium text-lg">
+                    Want to share your own creations? Join us→
+                </a>
+            </div>
         </div>
     </section>
 @endsection

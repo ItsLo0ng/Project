@@ -31,11 +31,11 @@
                     <!-- Main menu -->
                     <nav class="hidden md:flex space-x-8">
                         <a href="/" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200">Home</a>
-                        <a href="/fonts" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200">Search</a>
+                        <a href="/search" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200">Search</a>
                         <!-- Categories dropdown -->
                         <div class="relative group">
                             <button class="text-gray-700 hover:text-indigo-600 transition-colors duration-200 flex items-center">
-                                Categories
+                                Gallery
                                 <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                 </svg>
@@ -62,7 +62,7 @@
                             <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">Log in</a>
                             <a href="{{ route('register') }}" class="text-sm font-medium text-white bg-indigo-600 px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">Register</a>
                         @else
-                            <a href="{{ route('dashboard') }}" class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">Dashboard</a>
+                            <a href="{{ route('dashboard') }}" class="text-sm font-medium text-white bg-indigo-600 px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">Dashboard</a>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="text-sm font-medium text-gray-700 hover:text-red-600 transition-colors">Log out</button>
@@ -85,7 +85,7 @@
             <p>&copy; {{ date('Y') }} Font Share. All rights reserved.</p>
             <div class="mt-2 space-x-4">
                 <a href="/about" class="hover:text-indigo-400">About us</a>
-                <a href="/contact" class="hover:text-indigo-400">Contact</a>
+                <a href="/contact" class="hover:text-indigo-400">Contact us</a>
             </div>
         </div>
     </footer>

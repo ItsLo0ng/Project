@@ -24,12 +24,24 @@ class FontController extends Controller
                      ->latest()
                      ->paginate(15); // 15 fonts per page
         return view('fonts.index', compact('fonts'));
+
+
     }
 
     public function show(Font $font)
     {
-        $font->load('images', 'files', 'feedbacks.user');
+        // $font->load('images', 'files', 'feedbacks.user');
+        // $averageRating = $font->feedbacks->avg('rating');
+        // return view('fonts.show', compact('font', 'averageRating'));
+        $font->load([
+            'images',
+            'files',
+            'category',
+            'feedbacks.user'
+        ]);
+
         $averageRating = $font->feedbacks->avg('rating');
+
         return view('fonts.show', compact('font', 'averageRating'));
     }
 
@@ -84,17 +96,31 @@ class FontController extends Controller
 
     public function storeFeedback(Request $request, Font $font)
     {
-        $validated = $request->validate([
+        // $validated = $request->validate([
+        //     'rating' => 'required|integer|min:1|max:5',
+        //     'comment' => 'required|string|max:1000',
+        // ]);
+
+        // $validated['user_id'] = Auth::id();
+        // $validated['font_id'] = $font->id;
+        // $validated['feedback_date'] = now();
+
+        // UserFeedback::create($validated);
+
+        // return back()->with('success', 'Feedback submitted!');
+        $request->validate([
             'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'required|string|max:1000',
+            'comment' => 'nullable|string|max:1000',
         ]);
 
-        $validated['user_id'] = Auth::id();
-        $validated['font_id'] = $font->id;
-        $validated['feedback_date'] = now();
+        UserFeedback::create([
+            'user_id' => Auth::id(),
+            'font_id' => $font->id,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+            'feedback_date' => now(),
+        ]);
 
-        UserFeedback::create($validated);
-
-        return back()->with('success', 'Feedback submitted!');
+        return back()->with('success', 'Thank you for your feedback!');
     }
 }

@@ -1,22 +1,30 @@
+
 @section('content')
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard jejeje') }}
-        </h2>
-    </x-slot>
-    @section('content')
+
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-gray-800">My Fonts</h1>
+
+            <a href="{{ route('my-fonts.create') }}"
+               class="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700">
+                Upload New Font
+            </a>
+        </div>
         <div class="py-12">
             @if (auth()->user()->role === 'admin')
-                <a href="/admin" class="btn btn-primary">Go to Admin Panel</a>
+                <a href="/admin"
+                class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700">
+                    Go to Admin Panel
+                </a>
             @endif
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900">
-                        {{ __("You're logged in!") }}
-                    </div>
-                </div>
-            </div>
         </div>
-    @endsection
+        {{-- @include('userboard.index') --}}
+
+        
+    </div>
+
+</div>
+@endsection
 </x-app-layout>
