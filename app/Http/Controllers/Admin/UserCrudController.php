@@ -43,7 +43,8 @@ class UserCrudController extends CrudController
 
         $this->crud->column('name')
                 ->label('Full Name')
-                ->type('text');
+                ->type('text')
+                ->sortable(true);
 
         $this->crud->column('email')
                 ->label('Email')
@@ -76,13 +77,11 @@ class UserCrudController extends CrudController
         $this->crud->field('name')
                 ->label('Full Name')
                 ->type('text')
+                ->sortable(true)
                 ->required(true);
+                
 
-        // $this->crud->field('username')
-        //         ->label('Username')
-        //         ->type('text')
-        //         ->required(true)
-        //         ->hint('Used for login if email is not preferred');
+
 
         $this->crud->field('email')
                 ->label('Email')

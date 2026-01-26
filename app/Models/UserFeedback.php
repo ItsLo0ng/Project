@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserFeedback extends Model
 {
     use CrudTrait;
+    protected $table = 'user_feedbacks';
     protected $fillable = [
         'user_id',
         'font_id',

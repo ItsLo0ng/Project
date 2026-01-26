@@ -31,7 +31,7 @@
                     <!-- Main menu -->
                     <nav class="hidden md:flex space-x-8">
                         <a href="/" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200">Home</a>
-
+                        <a href="/fonts" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200">Font search</a>
                         <!-- Categories dropdown -->
                         <div class="relative group">
                             <button class="text-gray-700 hover:text-indigo-600 transition-colors duration-200 flex items-center">
@@ -46,20 +46,18 @@
                                     <a href="/fonts?category=chinese" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Chinese</a>
                                     <a href="/fonts?category=sans-serif" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Sans Serif</a>
                                     <a href="/fonts?category=serif" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Serif</a>
+                                    <a href="/categories/1" class="text-gray-700 hover:text-indigo-600">Categories</a>
                                     <!-- Add more later from DB -->
                                 </div>
                             </div>
                         </div>
 
-                        <a href="/fonts" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200">All Fonts</a>
+
+
                     </nav>
 
                     <!-- Right side: visitor count + auth -->
                     <div class="flex items-center space-x-6">
-                        <span class="text-sm text-gray-600 hidden md:block">
-                            Visitors: <strong>{{ Cache::get('visitor_count', 0) }}</strong>
-                        </span>
-
                         @guest
                             <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">Log in</a>
                             <a href="{{ route('register') }}" class="text-sm font-medium text-white bg-indigo-600 px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">Register</a>
@@ -82,13 +80,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-8 fade-in">
+    <footer class="bg-gray-900 text-white py-9 fade-in">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <p>&copy; {{ date('Y') }} Font Share. All rights reserved.</p>
             <div class="mt-2 space-x-4">
-                <a href="#" class="hover:text-indigo-400">About</a>
-                <a href="#" class="hover:text-indigo-400">Privacy</a>
-                <a href="#" class="hover:text-indigo-400">Contact</a>
+                <a href="/about" class="hover:text-indigo-400">About us</a>
+                <a href="/contact" class="hover:text-indigo-400">Contact</a>
             </div>
         </div>
     </footer>

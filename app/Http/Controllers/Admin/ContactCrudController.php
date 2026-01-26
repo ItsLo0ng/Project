@@ -39,12 +39,43 @@ class ContactCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        $this->crud->column('id')->type('number');
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        $this->crud->column('name')
+                ->label('Name')
+                ->type('text');
+
+        $this->crud->column('email')
+                ->label('Email')
+                ->type('text');
+
+        $this->crud->column('subject')
+                ->label('Subject')
+                ->type('text');
+
+        $this->crud->column('message')
+                ->label('Message')
+                ->type('text')
+                ->limit(100);
+
+        $this->crud->column('date_sent')
+                ->label('Date Sent')
+                ->type('datetime');
+
+        $this->crud->column('status')
+                ->label('Status')
+                ->type('text');
+
+        $this->crud->addColumn([
+            'name'      => 'user.name',
+            'label'     => 'User',
+            'type'      => 'text',
+            'searchLogic' => function ($q, $column, $search) {
+                $q->orWhereHas('user', function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%");
+                });
+            },
+        ]);
     }
 
     /**
@@ -55,13 +86,49 @@ class ContactCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(ContactRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+        $this->crud->setValidation();
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        $this->crud->field('name')
+                ->label('Name')
+                ->type('text')
+                ->required(true);
+
+        $this->crud->field('email')
+                ->label('Email')
+                ->type('text')
+                ->required(true);
+
+        $this->crud->field('subject')
+                ->label('Subject')
+                ->type('text');
+
+        $this->crud->field('message')
+                ->label('Message')
+                ->type('textarea')
+                ->required(true);
+
+        $this->crud->field('date_sent')
+                ->label('Date Sent')
+                ->type('datetime')
+                ->default(now()->format('Y-m-d H:i:s'))
+                ->required(true);
+
+        $this->crud->field('status')
+                ->label('Status')
+                ->type('select_from_array')
+                ->options(['pending' => 'Pending', 'answered' => 'Answered', 'closed' => 'Closed'])
+                ->default('pending')
+                ->required(true);
+
+        $this->crud->addField([
+            'name'        => 'user_id',
+            'label'       => 'User',
+            'type'        => 'select',
+            'entity'      => 'user',
+            'attribute'   => 'name',
+            'model'       => 'App\Models\User',
+            'allows_null' => true,
+        ]);
     }
 
     /**

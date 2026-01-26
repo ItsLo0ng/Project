@@ -30,10 +30,11 @@
                             </div>
                         </div>
                     </div>
-
+                    
                     <a href="/dashboard" class="inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium leading-5 text-gray-500 hover:text-indigo-700 hover:border-indigo-300 focus:outline-none focus:text-indigo-700 focus:border-indigo-300 transition duration-150 ease-in-out fade-in" 
                        :class="{ 'text-indigo-700 border-indigo-500': activeItem === 'dashboard' }" 
                        @click="activeItem = 'dashboard'">Dashboard</a>
+
                 </div>
             </div>
             <!-- Visitor count -->

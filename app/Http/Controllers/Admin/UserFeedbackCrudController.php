@@ -39,12 +39,42 @@ class UserFeedbackCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::setFromDb(); // set columns from db columns.
+        $this->crud->column('id')->type('number');
 
-        /**
-         * Columns can be defined using the fluent syntax:
-         * - CRUD::column('price')->type('number');
-         */
+        $this->crud->addColumn([
+            'name'      => 'font.font_name',
+            'label'     => 'Font',
+            'type'      => 'text',
+            'searchLogic' => function ($q, $column, $search) {
+                $q->orWhereHas('font', function ($query) use ($search) {
+                    $query->where('font_name', 'like', "%{$search}%");
+                });
+            },
+        ]);
+
+        $this->crud->addColumn([
+            'name'      => 'user.name',
+            'label'     => 'User',
+            'type'      => 'text',
+            'searchLogic' => function ($q, $column, $search) {
+                $q->orWhereHas('user', function ($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%");
+                });
+            },
+        ]);
+
+        $this->crud->column('rating')
+                ->label('Rating')
+                ->type('number');
+
+        $this->crud->column('comment')
+                ->label('Comment')
+                ->type('text')
+                ->limit(100);
+
+        $this->crud->column('feedback_date')
+                ->label('Feedback Date')
+                ->type('datetime');
     }
 
     /**
@@ -55,13 +85,46 @@ class UserFeedbackCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(UserFeedbackRequest::class);
-        CRUD::setFromDb(); // set fields from db columns.
+        $this->crud->setValidation();
 
-        /**
-         * Fields can be defined using the fluent syntax:
-         * - CRUD::field('price')->type('number');
-         */
+        $this->crud->addField([
+            'name'        => 'font_id',
+            'label'       => 'Font',
+            'type'        => 'select',          
+            'entity'      => 'font',
+            'attribute'   => 'name', //Long changed this from "font_name", db wrong name 
+            'model'       => 'App\Models\Font',
+            'wrapper'     => ['class' => 'form-group col-md-6'],
+            'allows_null' => false,
+        ]);
+
+        $this->crud->addField([
+            'name'        => 'user_id',
+            'label'       => 'User',
+            'type'        => 'select',          
+            'entity'      => 'user',
+            'attribute'   => 'name',
+            'model'       => 'App\Models\User',
+            'wrapper'     => ['class' => 'form-group col-md-6'],
+            'allows_null' => false,
+        ]);
+
+        $this->crud->field('rating')
+                ->label('Rating (1-5)')
+                ->type('number')
+                ->attributes(['min' => 1, 'max' => 5])
+                ->required(true);
+
+        $this->crud->field('comment')
+                ->label('Comment')
+                ->type('textarea')
+                ->required(true);
+
+        $this->crud->field('feedback_date')
+                ->label('Feedback Date')
+                ->type('datetime')
+                ->default(now()->format('Y-m-d H:i:s'))
+                ->required(true);
     }
 
     /**

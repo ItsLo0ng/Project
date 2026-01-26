@@ -25,7 +25,13 @@ class ContactRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'name' => 'required|string|max:120',
+            'email' => 'required|email',
+            'subject' => 'nullable|string|max:150',
+            'message' => 'required|string',
+            'date_sent' => 'required|date',
+            'status' => 'required|in:pending,answered,closed',
+            'user_id' => 'nullable|integer|exists:users,id',
         ];
     }
 
