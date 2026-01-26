@@ -28,17 +28,28 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 Route::middleware('auth')->group(function () {
-    Route::resource('my-fonts', MyFontController::class);
+    Route::get('/dashboard', [MyFontController::class, 'index'])
+        ->name('dashboard');
+    Route::get('/fonts', [MyFontController::class, 'index'])
+        ->name('userboard.index');
+
+    Route::get('/fonts/create', [MyFontController::class, 'create'])
+        ->name('userboard.create');
+
+    Route::post('/fonts', [MyFontController::class, 'store'])
+        ->name('userboard.store');
+
+    Route::get('/fonts/{font}/edit', [MyFontController::class, 'edit'])
+        ->name('userboard.edit');
+
+    Route::put('/fonts/{font}', [MyFontController::class, 'update'])
+        ->name('userboard.update');
+
+    Route::delete('/fonts/{font}', [MyFontController::class, 'destroy'])
+        ->name('userboard.destroy');
 });
 
 
-// Route::middleware('auth')->group(function () {
-//     Route::get('/dashboard', [MyFontController::class, 'index'])
-//         ->name('dashboard');
-
-//     Route::resource('my-fonts', MyFontController::class)
-//         ->except(['show']);
-// });
 
 
 Route::middleware('auth')->group(function () {
@@ -54,9 +65,10 @@ Route::get('/fonts', [FontController::class, 'index'])->name('fonts.index');
 Route::get('/fonts/{font}', [FontController::class, 'show'])->name('fonts.show');
 
 //login only route
+//conflict with dashboard 
 Route::middleware('auth')->group(function () {
-    Route::get('/fonts/create', [FontController::class, 'create'])->name('fonts.create');
-    Route::post('/fonts', [FontController::class, 'store'])->name('fonts.store');
+    // Route::get('/fonts/create', [FontController::class, 'create'])->name('fonts.create');
+    //Route::post('/fonts', [FontController::class, 'store'])->name('fonts.store');
     Route::post('/fonts/{font}/feedback', [FontController::class, 'storeFeedback'])->name('fonts.feedback');
 });
 

@@ -6,7 +6,7 @@
         <h1 class="text-3xl font-bold mb-8">Upload New Font</h1>
 
         <form method="POST"
-              action="{{ route('my-fonts.store') }}"
+              action="{{ route('userboard.store') }}"
               enctype="multipart/form-data"
               class="bg-white p-8 rounded-2xl shadow space-y-6">
             @csrf

@@ -72,24 +72,25 @@ class MyFontController extends Controller
     }
         public function edit(Font $font)
     {
-        $this->authorize('update', $font);
-
+        abort_if($font->user_id !== Auth::id(), 403);
         return view('userboard.edit', compact('font'));
     }
 
     public function update(Request $request, Font $font)
     {
-        $this->authorize('update', $font);
+        abort_if($font->user_id !== Auth::id(), 403);
 
-        // update logic
+        $font->update($request->only('name'));
+
+        return redirect()->route('dashboard');
     }
 
     public function destroy(Font $font)
     {
-        $this->authorize('delete', $font);
+        abort_if($font->user_id !== Auth::id(), 403);
 
         $font->delete();
 
-        return redirect()->route('dashboard');
+        return back();
     }
 }

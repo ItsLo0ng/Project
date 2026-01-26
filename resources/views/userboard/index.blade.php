@@ -1,4 +1,4 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('content')
 <div class="max-w-7xl mx-auto py-10 px-4">
@@ -26,14 +26,17 @@
 
                     <div class="flex gap-3 mt-4">
                         <a href="{{ route('userboard.edit', $font) }}"
-                           class="text-indigo-600">Edit</a>
+                           class="text-indigo-600 hover:underline">Edit</a>
 
                         <form method="POST"
                               action="{{ route('userboard.destroy', $font) }}">
                             @csrf
                             @method('DELETE')
-                            <button class="text-red-600">Delete</button>
+                            <button class="text-red-600 hover:underline">Delete</button>
                         </form>
+                        <a href="{{ route('fonts.show', $font) }}" class="text-indigo-600 hover:underline">
+                            View Details
+                        </a>
                     </div>
 
                 </div>
