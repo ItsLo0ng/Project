@@ -23,7 +23,13 @@
             @endif
         </div>
         @include('userboard.index')
-
+                <br>
+                <center>
+                <a href="{{ route('dashboard') }}"
+                   class="text-indigo-600 hover:text-indigo-800 font-medium text-lg">
+                    Back to Dashboard→
+                </a>
+                </center>
         
     </div>
 

@@ -65,55 +65,62 @@ class FontController extends Controller
     public function create()
     {
         $categories = FontCategory::orderBy('name')->get();
-        return view('fonts.create', compact('categories'));
+        return view('userboard.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
-        dd(
-            $request->all(),
-            $request->file('images'),
-            $request->file('files')
-        );
+        // Validate all data
         $validated = $request->validate([
-            'name' => 'required|string|max:200',
+            'name'        => 'required|string|max:200',
             'category_id' => 'required|exists:font_categories,id',
-            'designer' => 'nullable|string|max:160',
+            'designer'    => 'nullable|string|max:160',
             'description' => 'nullable|string',
-            'date_added' => 'required|date',
-            'images.*' => 'image|max:2048', // 2MB per image
-            'files.*' => 'file|mimes:ttf,otf,woff,woff2|max:5120', // 5MB per file
+            'date_added'  => 'nullable|date',
+            'images.*'    => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'files.*' => 'nullable|file|mimetypes:font/ttf,font/otf,font/woff,font/woff2,application/x-font-ttf,application/x-font-otf,application/font-woff,application/font-woff2|max:5120',
         ]);
 
-        $validated['user_id'] = Auth::id();
 
+        // Auto-fill designer and date_added
+        $validated['designer']    = Auth::user()->name ?? Auth::user()->username ?? 'Anonymous';
+        $validated['date_added']  = now();
+        $validated['user_id']     = Auth::id();
+
+        // Create the font
         $font = Font::create($validated);
 
-        // Handle image uploads
+        // Handle images (multiple)
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $path = $image->store('font_images', 'public');
-                FontImage::create([
-                    'font_id' => $font->id,
-                    'image_url' => $path,
-                    'image_type' => $image->getMimeType(),
-                ]);
+                if ($image->isValid()) {
+                    $path = $image->store('font_images', 'public');
+                    FontImage::create([
+                        'font_id'     => $font->id,
+                        'image_url'   => $path,
+                        'image_type'  => $image->getMimeType(),
+                    ]);
+                }
             }
         }
 
-        // Handle file uploads
+        // Handle files (multiple)
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
-                $path = $file->store('font_files', 'public');
-                FontFile::create([
-                    'font_id' => $font->id,
-                    'file_url' => $path,
-                    'file_format' => $file->extension(),
-                ]);
+                if ($file->isValid()) {
+                    $path = $file->store('font_files', 'public');
+                    FontFile::create([
+                        'font_id'     => $font->id,
+                        'file_url'    => $path,
+                        'file_format' => $file->getClientOriginalExtension(),
+                    ]);
+                }
             }
         }
 
-        return redirect()->route('fonts.show', $font)->with('success', 'Font shared successfully!');
+        // Redirect to dashboard with success message
+        return redirect()->route('dashboard')
+                        ->with('success', 'Font uploaded successfully!');
     }
 
     public function storeFeedback(Request $request, Font $font)
@@ -156,43 +163,58 @@ class FontController extends Controller
 
     public function update(Request $request, Font $font)
     {
-        abort_if($font->user_id !== Auth::id(), 403);
-        dd($request->file('images'), $request->file('files'));
+        // Check ownership
+        if ($font->user_id !== Auth::id()) {
+            abort(403, 'You do not own this font.');
+        }
+
+        // Validate
         $validated = $request->validate([
             'name' => 'required|string|max:200',
             'category_id' => 'required|exists:font_categories,id',
             'designer' => 'nullable|string|max:160',
             'description' => 'nullable|string',
-            'images.*' => 'image|max:2048',
-            'files.*' => 'file|mimes:ttf,otf,woff,woff2|max:5120',
+            'images.*' => 'nullable|image|max:2048',
+            'files.*' => 'nullable|file|mimetypes:font/ttf,font/otf,font/woff,font/woff2,application/x-font-ttf,application/x-font-otf,application/font-woff,application/font-woff2|max:5120'
         ]);
+        //no changing these
+        $validated['designer']   = $font->designer;   
+        $validated['date_added'] = $font->date_added;   
+        // Update font record
 
         $font->update($validated);
 
+        // Handle new images (append)
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
-                $path = $image->store('font_images', 'public'); //save the image
-                FontImage::create([
-                    'font_id' => $font->id,
-                    'image_url' => $image->$path,
-                    'image_type' => $image->getMimeType(),
-                ]);
+                if ($image->isValid()) {
+                    $path = $image->store('font_images', 'public');
+                    FontImage::create([
+                        'font_id' => $font->id,
+                        'image_url' => $path,
+                        'image_type' => $image->getMimeType(),
+                    ]);
+                }
             }
         }
 
+        // Handle new files (append)
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
-                $path = $file->store('font_files', 'public');
-                FontFile::create([
-                    
-                    'font_id' => $font->id,
-                    'file_url' => $file->$path,
-                    'file_format' => $file->extension(),
-                ]);
+                if ($file->isValid()) {
+                    $path = $file->store('font_files', 'public');
+                    FontFile::create([
+                        'font_id' => $font->id,
+                        'file_url' => $path,
+                        'file_format' => $file->getClientOriginalExtension(),
+                    ]);
+                }
             }
         }
 
-        return redirect()->route('dashboard')->with('success', 'Font updated!');
+        // Redirect to dashboard with success
+        return redirect()->route('dashboard')
+                        ->with('success', 'Font updated successfully!');
     }
         public function destroy(Font $font)
     {
@@ -210,4 +232,33 @@ class FontController extends Controller
 
         return back()->with('success', 'Font deleted!');
     }
+
+    /**
+     * Delete a specific image from a font
+     */
+    public function deleteImage(Font $font, FontImage $image)
+    {
+        abort_if($font->user_id !== Auth::id(), 403, 'You do not own this font.');
+
+        // Delete file from storage
+        Storage::disk('public')->delete($image->image_url);
+
+        // Delete record
+        $image->delete();
+
+        return back()->with('success', 'Image deleted successfully!');
+    }
+
+    /**
+     * Delete a specific file from a font
+     */
+    public function deleteFile(Font $font, FontFile $file)
+    {
+        abort_if($font->user_id !== Auth::id(), 403, 'You do not own this font.');
+
+        Storage::disk('public')->delete($file->file_url);
+        $file->delete();
+
+        return back()->with('success', 'File deleted successfully!');
+    }    
 }

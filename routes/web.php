@@ -33,6 +33,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/fonts/{font}', [FontController::class, 'update'])->name('fonts.update');
     Route::delete('/fonts/{font}', [FontController::class, 'destroy'])->name('fonts.destroy');
     Route::post('/fonts/{font}/feedback', [FontController::class, 'storeFeedback'])->name('fonts.feedback');
+
+    Route::delete('/fonts/{font}/images/{image}', [FontController::class, 'deleteImage'])->name('fonts.images.destroy');
+    Route::delete('/fonts/{font}/files/{file}', [FontController::class, 'deleteFile'])->name('fonts.files.destroy');
 });
 
 
