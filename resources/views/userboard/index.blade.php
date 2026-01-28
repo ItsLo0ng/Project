@@ -43,7 +43,7 @@
                             @if ($font->images->first())
                                 <img src="{{ Storage::url($font->images->first()->image_url) }}"
                                      alt="{{ $font->name }}"
-                                     class="object-cover w-full h-full">
+                                     class="max-h-full max-w-full object-contain">
                             @else
                                 <span class="text-gray-500 text-lg">No Preview</span>
                             @endif

@@ -41,7 +41,7 @@
                         <!-- Preview Image (use first image or placeholder) -->
                         <div class="h-48 bg-gray-200 flex items-center justify-center">
                             @if ($font->images->first())
-                                <img src="{{ Storage::url($font->images->first()->image_url) }}" alt="{{ $font->font_name }}" class="object-cover w-full h-full">
+                                <img src="{{ Storage::url($font->images->first()->image_url) }}" alt="{{ $font->font_name }}" class="max-h-full max-w-full object-contain">
                             @else
                                 <span class="text-gray-500">No Preview</span>
                             @endif

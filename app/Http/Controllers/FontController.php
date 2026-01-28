@@ -163,7 +163,6 @@ class FontController extends Controller
 
     public function update(Request $request, Font $font)
     {
-        // Check ownership
         if ($font->user_id !== Auth::id()) {
             abort(403, 'You do not own this font.');
         }
@@ -233,32 +232,23 @@ class FontController extends Controller
         return back()->with('success', 'Font deleted!');
     }
 
-    /**
-     * Delete a specific image from a font
-     */
     public function deleteImage(Font $font, FontImage $image)
     {
-        abort_if($font->user_id !== Auth::id(), 403, 'You do not own this font.');
+        abort_if($font->user_id !== Auth::id(), 403);
 
-        // Delete file from storage
         Storage::disk('public')->delete($image->image_url);
-
-        // Delete record
         $image->delete();
 
-        return back()->with('success', 'Image deleted successfully!');
+        return back()->with('success', 'Image deleted!');
     }
 
-    /**
-     * Delete a specific file from a font
-     */
     public function deleteFile(Font $font, FontFile $file)
     {
-        abort_if($font->user_id !== Auth::id(), 403, 'You do not own this font.');
+        abort_if($font->user_id !== Auth::id(), 403);
 
         Storage::disk('public')->delete($file->file_url);
         $file->delete();
 
-        return back()->with('success', 'File deleted successfully!');
-    }    
+        return back()->with('success', 'File deleted!');
+    }
 }

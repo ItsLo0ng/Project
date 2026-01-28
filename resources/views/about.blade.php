@@ -11,7 +11,7 @@
             <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-8">
                 A community-driven platform for designers and creators to share, discover, and collaborate on custom fonts.
             </p>
-            <a href="{{ route('fonts.index') }}" class="inline-block bg-white text-indigo-600 px-8 py-4 rounded-full font-semibold hover:bg-indigo-50 hover:shadow-lg transform hover:-translate-y-1 transition duration-300">
+            <a href="{{ route('fonts.search') }}" class="inline-block bg-white text-indigo-600 px-8 py-4 rounded-full font-semibold hover:bg-indigo-50 hover:shadow-lg transform hover:-translate-y-1 transition duration-300">
                 Explore Fonts //currently wrong route
             </a>
             
