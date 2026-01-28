@@ -11,7 +11,7 @@ class UserFeedback extends Model
     protected $table = 'user_feedbacks';
     protected $fillable = [
         'user_id',
-        'id',
+        'font_id',
         'rating',
         'comment',
         'feedback_date',

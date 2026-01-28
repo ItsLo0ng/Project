@@ -14,21 +14,26 @@
             </div>
 
             <!-- Search and Sort -->
-            <div class="flex flex-col md:flex-row justify-between mb-8">
-                <!-- Search -->
-                <form method="GET" class="w-full md:w-1/2 mb-4 md:mb-0">
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Search fonts by name..." class="w-full p-3 rounded-lg border border-gray-300 focus:border-indigo-500 transition">
-                </form>
+            <form method="GET" class="flex flex-col md:flex-row justify-between mb-8 gap-4">
+                <!-- Search Input -->
+                <input type="text" name="search" value="{{ request('search') }}" 
+                       placeholder="Search fonts by name..." 
+                       class="w-full md:w-1/2 p-3 rounded-lg border border-gray-300 focus:border-indigo-500 transition">
 
                 <!-- Sort Dropdown -->
-                <select name="sort" onchange="this.form.submit()" form="sort-form" class="p-3 rounded-lg border border-gray-300 focus:border-indigo-500 transition">
-                    <option value="name_asc" {{ $sort === 'name_asc' ? 'selected' : '' }}>Sort by Name (A-Z)</option>
-                    <option value="name_desc" {{ $sort === 'name_desc' ? 'selected' : '' }}>Sort by Name (Z-A)</option>
-                    <option value="date_asc" {{ $sort === 'date_asc' ? 'selected' : '' }}>Sort by Date (Oldest)</option>
-                    <option value="date_desc" {{ $sort === 'date_desc' ? 'selected' : '' }}>Sort by Date (Newest)</option>
+                <select name="sort" class="w-full md:w-auto p-3 rounded-lg border border-gray-300 focus:border-indigo-500 transition">
+                    <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>Sort by Name (A-Z)</option>
+                    <option value="name_desc" {{ request('sort') === 'name_desc' ? 'selected' : '' }}>Sort by Name (Z-A)</option>
+                    <option value="date_asc" {{ request('sort') === 'date_asc' ? 'selected' : '' }}>Sort by Date (Oldest )</option>
+                    <option value="date_desc" {{ request('sort') === 'date_desc' ? 'selected' : '' }}>Sort by Date (Newest)</option>
+                    <option value="rating_desc" {{ request('sort') === 'rating_desc' ? 'selected' : '' }}>Sort by Rating</option>
                 </select>
-            </div>
 
+                <!-- Optional Submit Button (improves accessibility) -->
+                <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition">
+                    Apply
+                </button>
+            </form>
             <!-- Fonts Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 @forelse ($fonts as $font)

@@ -33,9 +33,7 @@
 
         <!-- Description -->
         <textarea name="description" rows="4"
-                  class="w-full p-3 rounded-xl border">
-            {{ $font->description }}
-        </textarea>
+          class="w-full p-3 rounded-xl border">{{ $font->description }}</textarea>
 
         <!-- Existing Images -->
         <div>

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+
 
 class Font extends Model
 {
@@ -53,4 +55,8 @@ class Font extends Model
     {
         return $this->feedbacks()->avg('rating') ?? 0;
     }
+
+
+
+
 }

@@ -7,7 +7,7 @@ use App\Http\Controllers\FontController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AllFontController;
-use App\Http\Controllers\Dashboard\MyFontController;
+use App\Http\Controllers\Admin\FontCrudController;
 
 
 Route::get('/', function () {
@@ -68,3 +68,9 @@ Route::get('/search', [AllFontController::class, 'search'])
 Route::view('/articles/history', 'articles.history')->name('articles.history');
 Route::view('/articles/styles', 'articles.styles')->name('articles.styles');
 Route::view('/articles/tools', 'articles.tools')->name('articles.tools');
+
+//admin delete image
+Route::group(['prefix' => config('backpack.base.route_prefix'), 'middleware' => ['web', 'admin']], function () {
+    Route::delete('font/{font}/image/{image}', [FontCrudController::class, 'deleteImage'])->name('admin.font.image.delete');
+    Route::delete('font/{font}/file/{file}', [FontCrudController::class, 'deleteFile'])->name('admin.font.file.delete');
+});

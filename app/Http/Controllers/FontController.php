@@ -35,15 +35,15 @@ class FontController extends Controller
         return view('dashboard', compact('fonts'));
     }
 
-    public function index()
-    {
-        $fonts = Font::with('category', 'user', 'images', 'files', 'feedbacks')
-                     ->latest()
-                     ->paginate(15); // 15 fonts per page
-        return view('fonts.index', compact('fonts'));
+    // public function index()
+    // {
+    //     $fonts = Font::with('category', 'user', 'images', 'files', 'feedbacks')
+    //                  ->latest()
+    //                  ->paginate(15); // 15 fonts per page
+    //     return view('fonts.index', compact('fonts'));
 
 
-    }
+    // }
 
     public function show(Font $font)
     {
@@ -70,6 +70,11 @@ class FontController extends Controller
 
     public function store(Request $request)
     {
+        dd(
+            $request->all(),
+            $request->file('images'),
+            $request->file('files')
+        );
         $validated = $request->validate([
             'name' => 'required|string|max:200',
             'category_id' => 'required|exists:font_categories,id',
@@ -152,7 +157,7 @@ class FontController extends Controller
     public function update(Request $request, Font $font)
     {
         abort_if($font->user_id !== Auth::id(), 403);
-
+        dd($request->file('images'), $request->file('files'));
         $validated = $request->validate([
             'name' => 'required|string|max:200',
             'category_id' => 'required|exists:font_categories,id',
@@ -166,18 +171,22 @@ class FontController extends Controller
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
+                $path = $image->store('font_images', 'public'); //save the image
                 FontImage::create([
                     'font_id' => $font->id,
-                    'image_url' => $image->store('font_images', 'public'),
+                    'image_url' => $image->$path,
+                    'image_type' => $image->getMimeType(),
                 ]);
             }
         }
 
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
+                $path = $file->store('font_files', 'public');
                 FontFile::create([
+                    
                     'font_id' => $font->id,
-                    'file_url' => $file->store('font_files', 'public'),
+                    'file_url' => $file->$path,
                     'file_format' => $file->extension(),
                 ]);
             }

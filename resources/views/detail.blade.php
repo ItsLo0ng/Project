@@ -21,6 +21,7 @@
 
         <!-- Image Gallery -->
         <!-- Image Slider -->
+        <!-- Images -->
         <div 
             x-data="{
                 images: @js($font->images->pluck('image_url')),
