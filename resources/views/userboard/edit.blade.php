@@ -75,13 +75,10 @@
                                 <img src="{{ Storage::url($image->image_url) }}" 
                                     class="rounded-lg shadow object-contain h-32 w-full bg-gray-100"
                                     alt="Font image">
-                                <form action="{{ route('fonts.images.destroy', ['font' => $font, 'image' => $image]) }}" method="POST" class="absolute top-2 right-2">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Delete this image?')"
-                                            class="bg-red-600 text-white px-2 py-1 rounded-full text-xs opacity-0 group-hover:opacity-100 transition">
-                                        Delete
-                                    </button>
-                                </form>
+                                <button type="button" onclick="deleteImage({{ $font->id }}, {{ $image->id }})"
+                                        class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-xs opacity-0 group-hover:opacity-100 transition">
+                                    Delete
+                                </button>
                             </div>
                         @endforeach
                     </div>
@@ -108,11 +105,10 @@
                                 <a href="{{ Storage::url($file->file_url) }}" target="_blank" class="hover:underline">
                                     {{ strtoupper($file->file_format) }} File
                                 </a>
-                                <form action="{{ route('fonts.files.destroy', ['font' => $font, 'file' => $file]) }}" method="POST" class="inline">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Delete this file?')"
-                                            class="text-red-600 hover:text-red-800 text-sm">Delete</button>
-                                </form>
+                                <button type="button" onclick="deleteFile({{ $font->id }}, {{ $file->id }})"
+                                        class="text-red-600 hover:text-red-800 text-sm">
+                                    Delete
+                                </button>
                             </li>
                         @endforeach
                     </ul>
@@ -145,3 +141,63 @@
         </form>
     </div>
 @endsection
+
+<script>
+function deleteImage(fontId, imageId) {
+    if (!confirm('Delete this image? This cannot be undone.')) return;
+
+    const url = `/fonts/${fontId}/images/${imageId}`;
+
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Image deleted successfully!');
+            location.reload(); // refresh to update UI
+        } else {
+            response.text().then(text => {
+                alert('Failed to delete image: ' + (text || response.statusText));
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert('Error deleting image: ' + error.message);
+    });
+}
+
+function deleteFile(fontId, fileId) {
+    if (!confirm('Delete this file? This cannot be undone.')) return;
+
+    const url = `/fonts/${fontId}/files/${fileId}`;
+
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('File deleted successfully!');
+            location.reload();
+        } else {
+            response.text().then(text => {
+                alert('Failed to delete file: ' + (text || response.statusText));
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert('Error deleting file: ' + error.message);
+    });
+}
+</script>

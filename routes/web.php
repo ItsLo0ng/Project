@@ -29,13 +29,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/fonts/create', [FontController::class, 'create'])->name('fonts.create');
     Route::post('/fonts', [FontController::class, 'store'])->name('fonts.store');
 
+//put these first before destroy 
+    Route::delete('/fonts/{font}/images/{image}', [FontController::class, 'deleteImage'])->name('public.fonts.images.destroy');
+    Route::delete('/fonts/{font}/files/{file}', [FontController::class, 'deleteFile'])->name('public.fonts.files.destroy');
+
     Route::get('/fonts/{font}/edit', [FontController::class, 'edit'])->name('fonts.edit');
     Route::put('/fonts/{font}', [FontController::class, 'update'])->name('fonts.update');
     Route::delete('/fonts/{font}', [FontController::class, 'destroy'])->name('fonts.destroy');
     Route::post('/fonts/{font}/feedback', [FontController::class, 'storeFeedback'])->name('fonts.feedback');
 
-    Route::delete('/fonts/{font}/images/{image}', [FontController::class, 'deleteImage'])->name('fonts.images.destroy');
-    Route::delete('/fonts/{font}/files/{file}', [FontController::class, 'deleteFile'])->name('fonts.files.destroy');
+
 });
 
 

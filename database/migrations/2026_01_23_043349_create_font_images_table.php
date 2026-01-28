@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('font_id')
                   ->constrained()
-                  ->onDelete('cascade');
+                  ->onDelete('restrict'); 
             $table->string('image_url', 500);
             $table->string('image_type', 50)->nullable();
             $table->timestamps();

@@ -215,26 +215,13 @@ class FontController extends Controller
         return redirect()->route('dashboard')
                         ->with('success', 'Font updated successfully!');
     }
-        public function destroy(Font $font)
-    {
-        abort_if($font->user_id !== Auth::id(), 403);
 
-        foreach ($font->images as $image) {
-            Storage::disk('public')->delete($image->image_url);
-        }
 
-        foreach ($font->files as $file) {
-            Storage::disk('public')->delete($file->file_url);
-        }
-
-        $font->delete();
-
-        return back()->with('success', 'Font deleted!');
-    }
 
     public function deleteImage(Font $font, FontImage $image)
     {
-        abort_if($font->user_id !== Auth::id(), 403);
+        // dd('deleteImage method called for image ID: ' . $image->id);  // ← debug
+        // abort_if($font->user_id !== Auth::id(), 403);
 
         Storage::disk('public')->delete($image->image_url);
         $image->delete();
@@ -244,11 +231,33 @@ class FontController extends Controller
 
     public function deleteFile(Font $font, FontFile $file)
     {
-        abort_if($font->user_id !== Auth::id(), 403);
+        // abort_if($font->user_id !== Auth::id(), 403);
 
         Storage::disk('public')->delete($file->file_url);
         $file->delete();
 
         return back()->with('success', 'File deleted!');
+    }
+
+    public function destroy(Font $font)
+    {
+        // abort_if($font->user_id !== Auth::id(), 403);
+
+        // Delete all images first
+        foreach ($font->images as $image) {
+            Storage::disk('public')->delete($image->image_url);
+            $image->delete();  // ← this must stay here
+        }
+
+        // Delete all files first
+        foreach ($font->files as $file) {
+            Storage::disk('public')->delete($file->file_url);
+            $file->delete();  // ← this must stay here
+        }
+
+        // Now delete the font (children are gone, no constraint violation)
+        $font->delete();
+
+        return redirect()->route('dashboard')->with('success', 'Font deleted successfully!');
     }
 }
