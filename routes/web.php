@@ -31,6 +31,7 @@ Route::middleware('auth')->group(function () {
 
 //put these first before destroy 
     Route::delete('/fonts/{font}/images/{image}', [FontController::class, 'deleteImage'])->name('public.fonts.images.destroy');
+
     Route::delete('/fonts/{font}/files/{file}', [FontController::class, 'deleteFile'])->name('public.fonts.files.destroy');
 
     Route::get('/fonts/{font}/edit', [FontController::class, 'edit'])->name('fonts.edit');

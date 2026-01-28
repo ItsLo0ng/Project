@@ -68,14 +68,15 @@
             <!-- Existing Images -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Current Images</label>
-                @if($font->images->isNotEmpty())
+                {{-- @if($font->images->isNotEmpty())
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                         @foreach($font->images as $image)
                             <div class="relative group">
                                 <img src="{{ Storage::url($image->image_url) }}" 
                                     class="rounded-lg shadow object-contain h-32 w-full bg-gray-100"
                                     alt="Font image">
-                                <button type="button" onclick="deleteImage({{ $font->id }}, {{ $image->id }})"
+                                <button type="button" 
+                                        onclick="deleteImage(event, {{ $font->id }}, {{ $image->id }})"
                                         class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-xs opacity-0 group-hover:opacity-100 transition">
                                     Delete
                                 </button>
@@ -84,7 +85,7 @@
                     </div>
                 @else
                     <p class="text-gray-500">No images uploaded yet</p>
-                @endif
+                @endif --}}
             </div>
 
             <!-- Upload New Images -->
@@ -132,21 +133,39 @@
                     Save Changes
                 </button>
             </div>
-            <div class="pt-6">
-                <button type="submit"
-                        class="w-full bg-indigo-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-indigo-700 transition">
-                    Save Changes
-                </button>
-            </div>
         </form>
+
+        @if($font->images->isNotEmpty())
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                @foreach($font->images as $image)
+                    <div class="relative group">
+                        <img src="{{ Storage::url($image->image_url) }}" 
+                            class="rounded-lg shadow object-contain h-32 w-full bg-gray-100"
+                            alt="Font image">
+                        <button type="button" 
+                                onclick="deleteImage(event, {{ $font->id }}, {{ $image->id }})"
+                                class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-full text-xs opacity-0 group-hover:opacity-100 transition">
+                            Delete
+                        </button>
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p class="text-gray-500">No images uploaded yet</p>
+        @endif        
     </div>
 @endsection
 
+{{-- 
 <script>
-function deleteImage(fontId, imageId) {
+function deleteImage(event, fontId, imageId) {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (!confirm('Delete this image? This cannot be undone.')) return;
 
     const url = `/fonts/${fontId}/images/${imageId}`;
+    console.log('Attempting to delete image at URL:', url); // ← debug
 
     fetch(url, {
         method: 'DELETE',
@@ -157,12 +176,14 @@ function deleteImage(fontId, imageId) {
         },
     })
     .then(response => {
+        console.log('Response status:', response.status); // ← debug
         if (response.ok) {
-            alert('Image deleted successfully!');
-            location.reload(); // refresh to update UI
+            console.log('Delete successful');
+            location.reload();
         } else {
             response.text().then(text => {
-                alert('Failed to delete image: ' + (text || response.statusText));
+                console.log('Delete failed response:', text);
+                alert('Failed to delete image: ' + text);
             });
         }
     })
@@ -172,10 +193,14 @@ function deleteImage(fontId, imageId) {
     });
 }
 
-function deleteFile(fontId, fileId) {
+function deleteFile(event, fontId, fileId) {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (!confirm('Delete this file? This cannot be undone.')) return;
 
     const url = `/fonts/${fontId}/files/${fileId}`;
+    console.log('Attempting to delete file at URL:', url);
 
     fetch(url, {
         method: 'DELETE',
@@ -186,12 +211,88 @@ function deleteFile(fontId, fileId) {
         },
     })
     .then(response => {
+        console.log('Response status:', response.status);
         if (response.ok) {
-            alert('File deleted successfully!');
+            console.log('Delete successful');
             location.reload();
         } else {
             response.text().then(text => {
-                alert('Failed to delete file: ' + (text || response.statusText));
+                console.log('Delete failed response:', text);
+                alert('Failed to delete file: ' + text);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert('Error deleting file: ' + error.message);
+    });
+}
+</script> --}}
+
+<script>
+function deleteImage(event, fontId, imageId) {
+    event.preventDefault();     // Stop main form submit
+    event.stopPropagation();    // Stop bubbling
+    event.stopImmediatePropagation(); // Extra safety
+
+    if (!confirm('Delete this image? This cannot be undone.')) return;
+
+    const url = `/fonts/${fontId}/images/${imageId}`;
+    console.log('Sending DELETE to:', url);
+
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        if (response.ok) {
+            console.log('Delete success - reloading');
+            location.reload();
+        } else {
+            response.text().then(text => {
+                console.log('Delete failed:', text);
+                alert('Failed to delete image: ' + text);
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert('Error deleting image: ' + error.message);
+    });
+}
+
+function deleteFile(event, fontId, fileId) {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+
+    if (!confirm('Delete this file? This cannot be undone.')) return;
+
+    const url = `/fonts/${fontId}/files/${fileId}`;
+    console.log('Sending DELETE to:', url);
+
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+        },
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        if (response.ok) {
+            console.log('Delete success - reloading');
+            location.reload();
+        } else {
+            response.text().then(text => {
+                console.log('Delete failed:', text);
+                alert('Failed to delete file: ' + text);
             });
         }
     })
