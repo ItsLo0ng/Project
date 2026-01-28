@@ -14,7 +14,7 @@
                 <span>Category: {{ $font->category->name }}</span>
                 <span>Designer: {{ $font->designer ?? 'Unknown' }}</span>
                 <span>
-                    Rating: {{ number_format($averageRating ?? 0, 1) }}/5
+                    Rating: {{ number_format($averageRating ?? 0, 1) }}/5⭐
                 </span>
             </div>
         </div>

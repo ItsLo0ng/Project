@@ -12,10 +12,27 @@ use App\Models\FontFile;
 
 class FontController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $userFonts = Font::where('user_id', Auth::id())->latest()->paginate(10);
-        return view('dashboard', compact('userFonts'));
+        $query = Font::where('user_id', Auth::id())
+            ->with('images', 'feedbacks');
+
+        // Search
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // Sort
+        if ($request->sort === 'rating') {
+            $query->withAvg('feedbacks', 'rating')
+                  ->orderByDesc('feedbacks_avg_rating');
+        } else {
+            $query->latest();
+        }
+
+        $fonts = $query->paginate(10);
+
+        return view('dashboard', compact('fonts'));
     }
 
     public function index()
@@ -30,9 +47,9 @@ class FontController extends Controller
 
     public function show(Font $font)
     {
-        // $font->load('images', 'files', 'feedbacks.user');
-        // $averageRating = $font->feedbacks->avg('rating');
-        // return view('fonts.show', compact('font', 'averageRating'));
+        $font->load('images', 'files', 'feedbacks.user');
+        $averageRating = $font->feedbacks->avg('rating');
+        return view('detail', compact('font', 'averageRating'));
         $font->load([
             'images',
             'files',
@@ -42,19 +59,19 @@ class FontController extends Controller
 
         $averageRating = $font->feedbacks->avg('rating');
 
-        return view('fonts.show', compact('font', 'averageRating'));
+        return view('detail', compact('font', 'averageRating'));
     }
 
     public function create()
     {
-        $categories = FontCategory::orderBy('category_name')->get();
+        $categories = FontCategory::orderBy('name')->get();
         return view('fonts.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'font_name' => 'required|string|max:200',
+            'name' => 'required|string|max:200',
             'category_id' => 'required|exists:font_categories,id',
             'designer' => 'nullable|string|max:160',
             'description' => 'nullable|string',
@@ -96,18 +113,18 @@ class FontController extends Controller
 
     public function storeFeedback(Request $request, Font $font)
     {
-        // $validated = $request->validate([
-        //     'rating' => 'required|integer|min:1|max:5',
-        //     'comment' => 'required|string|max:1000',
-        // ]);
+        $validated = $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|max:1000',
+        ]);
 
-        // $validated['user_id'] = Auth::id();
-        // $validated['font_id'] = $font->id;
-        // $validated['feedback_date'] = now();
+        $validated['user_id'] = Auth::id();
+        $validated['font_id'] = $font->id;
+        $validated['feedback_date'] = now();
 
-        // UserFeedback::create($validated);
+        UserFeedback::create($validated);
 
-        // return back()->with('success', 'Feedback submitted!');
+        return back()->with('success', 'Feedback submitted!');
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'nullable|string|max:1000',
@@ -122,5 +139,66 @@ class FontController extends Controller
         ]);
 
         return back()->with('success', 'Thank you for your feedback!');
+    }
+
+        public function edit(Font $font)
+    {
+        abort_if($font->user_id !== Auth::id(), 403);
+        $font->load('images', 'files');
+        $categories = FontCategory::orderBy('name')->get();
+        return view('userboard.edit', compact('font', 'categories'));
+    }
+
+    public function update(Request $request, Font $font)
+    {
+        abort_if($font->user_id !== Auth::id(), 403);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:200',
+            'category_id' => 'required|exists:font_categories,id',
+            'designer' => 'nullable|string|max:160',
+            'description' => 'nullable|string',
+            'images.*' => 'image|max:2048',
+            'files.*' => 'file|mimes:ttf,otf,woff,woff2|max:5120',
+        ]);
+
+        $font->update($validated);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                FontImage::create([
+                    'font_id' => $font->id,
+                    'image_url' => $image->store('font_images', 'public'),
+                ]);
+            }
+        }
+
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                FontFile::create([
+                    'font_id' => $font->id,
+                    'file_url' => $file->store('font_files', 'public'),
+                    'file_format' => $file->extension(),
+                ]);
+            }
+        }
+
+        return redirect()->route('dashboard')->with('success', 'Font updated!');
+    }
+        public function destroy(Font $font)
+    {
+        abort_if($font->user_id !== Auth::id(), 403);
+
+        foreach ($font->images as $image) {
+            Storage::disk('public')->delete($image->image_url);
+        }
+
+        foreach ($font->files as $file) {
+            Storage::disk('public')->delete($file->file_url);
+        }
+
+        $font->delete();
+
+        return back()->with('success', 'Font deleted!');
     }
 }

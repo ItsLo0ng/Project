@@ -7,17 +7,13 @@
         <div class="flex justify-between items-center">
             <h1 class="text-3xl font-bold text-gray-800">My Fonts</h1>
 
-            <a href="{{ route('userboard.create') }}"
+            <a href="{{ route('fonts.create') }}"
                class="px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700">
                 Upload New Font
             </a>
-            @if (auth()->user()->role === 'admin')
-                <a href="/admin"
-                class="inline-block px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700">
-                    Go to Admin Panel
-                </a>
-            @endif
+
         </div>
+        <br>
         <div>
             @if (auth()->user()->role === 'admin')
                 <a href="/admin"

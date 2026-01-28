@@ -22,53 +22,16 @@ Route::get('/about', function () {
 
 
 
-
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+//userboard.route
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [MyFontController::class, 'index'])
-        ->name('dashboard');
-    Route::get('/fonts', [MyFontController::class, 'index'])
-        ->name('userboard.index');
+    Route::get('/dashboard', [FontController::class, 'dashboard'])->name('dashboard');
 
-    Route::get('/fonts/create', [MyFontController::class, 'create'])
-        ->name('userboard.create');
+    Route::get('/fonts/create', [FontController::class, 'create'])->name('fonts.create');
+    Route::post('/fonts', [FontController::class, 'store'])->name('fonts.store');
 
-    Route::post('/fonts', [MyFontController::class, 'store'])
-        ->name('userboard.store');
-
-    Route::get('/fonts/{font}/edit', [MyFontController::class, 'edit'])
-        ->name('userboard.edit');
-
-    Route::put('/fonts/{font}', [MyFontController::class, 'update'])
-        ->name('userboard.update');
-
-    Route::delete('/fonts/{font}', [MyFontController::class, 'destroy'])
-        ->name('userboard.destroy');
-});
-
-
-
-
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
-
-require __DIR__.'/auth.php';
-
-
-Route::get('/fonts', [FontController::class, 'index'])->name('fonts.index');
-Route::get('/fonts/{font}', [FontController::class, 'show'])->name('fonts.show');
-
-//login only route
-//conflict with dashboard 
-Route::middleware('auth')->group(function () {
-    // Route::get('/fonts/create', [FontController::class, 'create'])->name('fonts.create');
-    //Route::post('/fonts', [FontController::class, 'store'])->name('fonts.store');
+    Route::get('/fonts/{font}/edit', [FontController::class, 'edit'])->name('fonts.edit');
+    Route::put('/fonts/{font}', [FontController::class, 'update'])->name('fonts.update');
+    Route::delete('/fonts/{font}', [FontController::class, 'destroy'])->name('fonts.destroy');
     Route::post('/fonts/{font}/feedback', [FontController::class, 'storeFeedback'])->name('fonts.feedback');
 });
 
@@ -76,24 +39,32 @@ Route::middleware('auth')->group(function () {
 
 
 
+
+
+//profile 
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
+//font details page 
+Route::get('/fonts/{font}', [FontController::class, 'show'])->name('fonts.show');
+
+
+//contact page
 Route::get('/contact', [ContactController::class, 'show'])->name('contact.show');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
-
-
-
-
+//category search page
 Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
 
-
-
-
-
+//search page
 Route::get('/search', [AllFontController::class, 'search'])
     ->name('fonts.search');
 
-
-
+//articles 
 Route::view('/articles/history', 'articles.history')->name('articles.history');
 Route::view('/articles/styles', 'articles.styles')->name('articles.styles');
 Route::view('/articles/tools', 'articles.tools')->name('articles.tools');
