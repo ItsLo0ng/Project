@@ -6,10 +6,10 @@
             <!-- Header -->
             <div class="text-center mb-12 fade-in">
                 <h1 class="text-4xl font-bold text-gray-800 mb-2">
-                    All Fonts
+                    All Calligraphy Fonts
                 </h1>
                 <p class="text-xl text-gray-600">
-                    Browse all fonts across all categories
+                    Browse all calligraphy fonts across all categories
                 </p>
             </div>
 
@@ -17,7 +17,7 @@
             <form method="GET" class="flex flex-col md:flex-row justify-between mb-8 gap-4">
                 <!-- Search Input -->
                 <input type="text" name="search" value="{{ request('search') }}" 
-                       placeholder="Search fonts by name..." 
+                       placeholder="Search calligraphy fonts by name..." 
                        class="w-full md:w-1/2 p-3 rounded-lg border border-gray-300 focus:border-indigo-500 transition">
 
                 <!-- Sort Dropdown -->

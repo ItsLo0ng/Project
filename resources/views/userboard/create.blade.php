@@ -5,7 +5,7 @@
     <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900">Upload Your Font</h1>
+            <h1 class="text-4xl font-bold text-gray-900">Upload Your Calligraphy Font</h1>
             <p class="mt-4 text-lg text-gray-600">
                 Share your creation with the community — add images, files, and details
             </p>
@@ -40,7 +40,7 @@
                         <input type="text" name="name" id="name" required
                                value="{{ old('name') }}"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                               placeholder="e.g. Elegant Serif 2025">
+                               placeholder="Calligraphy font name">
                         @error('name')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -76,7 +76,7 @@
                         <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Description (optional)</label>
                         <textarea name="description" id="description" rows="5"
                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-                                  placeholder="Tell us about your font...">{{ old('description') }}</textarea>
+                                  placeholder="Tell us about your calligraphy font...">{{ old('description') }}</textarea>
                     </div>
 
 
@@ -93,7 +93,7 @@
 
                     <!-- Files -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Font Files (.ttf, .otf, .woff, .woff2)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Calligraphy Font Files (.ttf, .otf, .woff, .woff2)</label>
                         <input type="file" name="files[]" multiple accept=".ttf,.otf,.woff,.woff2"
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition">
                         <p class="mt-1 text-sm text-gray-500">Max 5MB per file</p>
@@ -106,7 +106,7 @@
                     <div class="pt-6">
                         <button type="submit"
                                 class="w-full bg-indigo-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-indigo-700 transition">
-                            Upload Font
+                            Upload Calligraphy Font
                         </button>
                     </div>
                 </form>

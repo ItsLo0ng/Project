@@ -15,6 +15,7 @@ return [
     */
 
     'registration_open' => env('BACKPACK_REGISTRATION_OPEN', env('APP_ENV') === 'local'),
+    // 'registration_open' => false
 
     /*
     |--------------------------------------------------------------------------

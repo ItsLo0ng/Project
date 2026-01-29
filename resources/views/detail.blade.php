@@ -20,8 +20,6 @@
         </div>
 
         <!-- Image Gallery -->
-        <!-- Image Slider -->
-        <!-- Images -->
         <div 
             x-data="{
                 images: @js($font->images->pluck('image_url')),
@@ -126,16 +124,16 @@
         <!-- Feedback Section -->
         <div class="bg-white rounded-2xl shadow p-10">
             <h2 class="text-2xl font-semibold mb-6">
-                Rate and give us your feedback!
+                Rate and give your feedback!
             </h2>
 
             <!-- Existing Feedback -->
-            <div class="space-y-6 mb-10">
+            {{-- <div class="space-y-6 mb-10">
                 @forelse ($font->feedbacks as $feedback)
                     <div class="border-b pb-4">
                         <div class="flex justify-between mb-1">
                             <span class="font-medium">
-                                {{ $feedback->user->username }}
+                                {{ $feedback->user->name }}
                             </span>
                             <span>
                                 ⭐ {{ $feedback->rating }}/5
@@ -150,6 +148,46 @@
                         No feedback yet. Be the first!
                     </p>
                 @endforelse
+            </div> --}}
+            <div class="space-y-6 mb-10">
+                @forelse ($font->feedbacks->take(5) as $feedback)
+                    <div class="border-b pb-6 last:border-b-0">
+                        <div class="flex items-center justify-between mb-2">
+                            <!-- Username + Rating -->
+                            <div class="flex items-center gap-3">
+                                <span class="font-medium text-gray-800">
+                                    {{ $feedback->user->name ?? $feedback->user->username ?? 'Anonymous' }}
+                                </span>
+                                <span class="text-yellow-500 text-xl">
+                                    {{ str_repeat('★', $feedback->rating) }}
+                                    {{ str_repeat('☆', 5 - $feedback->rating) }}
+                                </span>
+                            </div>
+                            <span class="text-sm text-gray-500">
+                                {{ \Carbon\Carbon::parse($feedback->feedback_date)->diffForHumans() }}
+                            </span>
+                        </div>
+
+                        <!-- Comment -->
+                        <p class="text-gray-700 leading-relaxed">
+                            {{ $feedback->comment }}
+                        </p>
+                    </div>
+                @empty
+                    <p class="text-gray-500 text-center py-8">
+                        No feedback yet. Be the first to share your thoughts!
+                    </p>
+                @endforelse
+
+                <!-- If there are more than 5 feedbacks -->
+                @if($font->feedbacks->count() > 5)
+                    <div class="text-center mt-6">
+                        <a href="{{ route('fonts.feedbacks', $font) }}?tab=feedback#feedback"
+                        class="inline-flex items-center px-6 py-3 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition">
+                            View all {{ $font->feedbacks->count() }} feedbacks →
+                        </a>
+                    </div>
+                @endif
             </div>
 
             <!-- Feedback Form -->
@@ -196,7 +234,6 @@
                 </p>
             @endauth
         </div>
-
     </div>
 </section>
 @endsection

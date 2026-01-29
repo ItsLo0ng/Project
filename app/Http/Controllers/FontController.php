@@ -71,6 +71,7 @@ class FontController extends Controller
     public function store(Request $request)
     {
         // Validate all data
+        // dd($request->file('files')[0]->getMimeType(), $request->file('files')[0]->getClientOriginalExtension());
         $validated = $request->validate([
             'name'        => 'required|string|max:200',
             'category_id' => 'required|exists:font_categories,id',
@@ -78,7 +79,7 @@ class FontController extends Controller
             'description' => 'nullable|string',
             'date_added'  => 'nullable|date',
             'images.*'    => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'files.*' => 'nullable|file|mimetypes:font/ttf,font/otf,font/woff,font/woff2,application/x-font-ttf,application/x-font-otf,application/font-woff,application/font-woff2|max:5120',
+            'files.*' => 'nullable|file|mimetypes:font/ttf,font/otf,font/woff,font/woff2,application/x-font-ttf,application/x-font-otf,application/font-woff,application/font-woff2,application/vnd.ms-opentype,application/octet-stream|max:5120',
         ]);
 
 
@@ -161,29 +162,26 @@ class FontController extends Controller
         return view('userboard.edit', compact('font', 'categories'));
     }
 
+
     public function update(Request $request, Font $font)
     {
-        if ($font->user_id !== Auth::id()) {
-            abort(403, 'You do not own this font.');
-        }
-
+        // Check ownership
+        abort_if($font->user_id !== Auth::id(), 403, 'You do not own this font.');
+        // dd($request->file('files')[0]->getMimeType(), $request->file('files')[0]->getClientOriginalExtension());
         // Validate
         $validated = $request->validate([
-            'name' => 'required|string|max:200',
+            'name'        => 'required|string|max:200',
             'category_id' => 'required|exists:font_categories,id',
-            'designer' => 'nullable|string|max:160',
+            'designer'    => 'nullable|string|max:160',
             'description' => 'nullable|string',
-            'images.*' => 'nullable|image|max:2048',
-            'files.*' => 'nullable|file|mimetypes:font/ttf,font/otf,font/woff,font/woff2,application/x-font-ttf,application/x-font-otf,application/font-woff,application/font-woff2|max:5120'
+            'images.*'    => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'files.*' => 'nullable|file|mimetypes:font/ttf,font/otf,font/woff,font/woff2,application/x-font-ttf,application/x-font-otf,application/font-woff,application/font-woff2,application/vnd.ms-opentype,application/octet-stream|max:5120',
         ]);
-        //no changing these
-        $validated['designer']   = $font->designer;   
-        $validated['date_added'] = $font->date_added;   
-        // Update font record
 
+        // Update font record
         $font->update($validated);
 
-        // Handle new images (append)
+        // Handle new images (append only)
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 if ($image->isValid()) {
@@ -197,7 +195,7 @@ class FontController extends Controller
             }
         }
 
-        // Handle new files (append)
+        // Handle new files (append only)
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 if ($file->isValid()) {
@@ -211,11 +209,8 @@ class FontController extends Controller
             }
         }
 
-        // Redirect to dashboard with success
-        return redirect()->route('dashboard')
-                        ->with('success', 'Font updated successfully!');
+        return redirect()->route('dashboard')->with('success', 'Font updated successfully!');
     }
-
 
 
     public function deleteImage(Font $font, FontImage $image)
@@ -259,5 +254,19 @@ class FontController extends Controller
         $font->delete();
 
         return redirect()->route('dashboard')->with('success', 'Font deleted successfully!');
+    }
+
+
+        /**
+     * Show all feedbacks for a font (paginated)
+     */
+    public function feedbacks(Font $font)
+    {
+        $feedbacks = $font->feedbacks()
+                        ->with('user')           // load username
+                        ->latest()               // newest first
+                        ->paginate(10);          // 10 per page
+
+        return view('feedbacks', compact('font', 'feedbacks'));
     }
 }

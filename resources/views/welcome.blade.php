@@ -32,7 +32,10 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-gray-700">
                 <div class="fade-in">
                     <h3 class="text-2xl font-semibold mb-3 text-indigo-600">
-                        ✒ A Timeless Craft
+                        <center>
+                            A Timeless Craft
+                        </center>
+                         
                     </h3>
                     <p class="leading-relaxed">
                         Calligraphy is the visual art of writing, practiced for thousands of years across cultures.
@@ -42,7 +45,9 @@
 
                 <div class="fade-in">
                     <h3 class="text-2xl font-semibold mb-3 text-indigo-600">
-                        🖌 Many Styles, One Soul
+                        <center>
+                            Many Styles, One Soul
+                        </center>
                     </h3>
                     <p class="leading-relaxed">
                         Each culture shaped its own calligraphic voice — Roman serif, Gothic blackletter,
@@ -52,7 +57,9 @@
 
                 <div class="fade-in">
                     <h3 class="text-2xl font-semibold mb-3 text-indigo-600">
-                        🎨 Calligraphy in the Digital Age
+                        <center>
+                            Calligraphy in the Digital Age
+                        </center>
                     </h3>
                     <p class="leading-relaxed">
                         Today, calligraphy lives on through digital fonts, branding, tattoos, posters,
@@ -66,7 +73,7 @@
     <!-- Featured section-->
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800 fade-in">
+            <h2 class="text-4xl font-bold text-center mb-16 text-gray-800 fade-in ">
                 Articles about Caligraphy
             </h2>
 

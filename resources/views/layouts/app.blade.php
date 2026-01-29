@@ -10,7 +10,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -20,19 +20,25 @@
     <header class="bg-white shadow-sm sticky top-0 z-50 fade-in">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <a href="/" class="flex items-center space-x-2">
-                    <img src="{{ asset('images/logo.png') }}" alt="Image" class="h-8 w-auto">
-                    <span class="text-xl font-bold text-indigo-700">Scratchy Nib</span>
-                </a>
+                <!-- Left: Logo + Username -->
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="flex items-center space-x-2">
+                        <img src="{{ asset('images/logo.png') }}" alt="Scratchy Nib Logo" class="h-12 w-auto object-contain">
+                        <span class="text-xl font-bold text-indigo-700 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent tracking-wide">
+                            Scratchy Nib
 
-                <!-- Navigation + right side -->
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Right: Navigation + Auth Links -->
                 <div class="flex items-center space-x-8">
-                    <!-- Main menu -->
+                    <!-- Main menu (hidden on mobile) -->
                     <nav class="hidden md:flex space-x-8">
                         <a href="/" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200">Home</a>
                         <a href="/search" class="text-gray-700 hover:text-indigo-600 transition-colors duration-200">Search</a>
-                        <!-- Categories dropdown -->
+
+                        <!-- Gallery dropdown -->
                         <div class="relative group">
                             <button class="text-gray-700 hover:text-indigo-600 transition-colors duration-200 flex items-center">
                                 Gallery
@@ -40,24 +46,21 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                                 </svg>
                             </button>
-                            <div class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform scale-95 group-hover:scale-100">
+                            <div class="absolute left-0 mt-2 w-max bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform scale-95 group-hover:scale-100">
                                 <div class="py-1">
-                                    <a href="/fonts?category=roman" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Roman</a>
-                                    <a href="/fonts?category=chinese" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Chinese</a>
-                                    <a href="/fonts?category=sans-serif" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Sans Serif</a>
-                                    <a href="/fonts?category=serif" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Serif</a>
-                                    <a href="/categories/1" class="text-gray-700 hover:text-indigo-600">Categories</a>
-                                    <!-- Add more later from DB -->
+                                    <a href="/categories/2" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Traditional Calligraphy</a>
+                                    <a href="/categories/3" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Contemporary Calligraphy</a>
+                                    <a href="/categories/4" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Hand-lettering Design</a>
+                                    <a href="/categories/5" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Modern Calligraphy</a>
+                                    <a href="/categories/1" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50">Test</a>
                                 </div>
                             </div>
                         </div>
-
-
-
                     </nav>
 
-                    <!-- Right side: visitor count + auth -->
+                    <!-- Right side: Visitor count + Auth -->
                     <div class="flex items-center space-x-6">
+
                         @guest
                             <a href="{{ route('login') }}" class="text-sm font-medium text-gray-700 hover:text-indigo-600 transition-colors">Log in</a>
                             <a href="{{ route('register') }}" class="text-sm font-medium text-white bg-indigo-600 px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">Register</a>
@@ -69,6 +72,18 @@
                             </form>
                         @endguest
                     </div>
+                    @auth
+                    <span class="
+                        hidden md:block
+                        text-sm
+                        font-semibold
+                        bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500
+                        bg-clip-text text-transparent
+                        tracking-wide
+                    ">
+                        Hi, {{ Auth::user()->name ?? 'User' }}
+                    </span>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -79,23 +94,23 @@
         @yield('content')
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-9 fade-in">
+    <!-- Footer (increased padding to avoid ticker overlap) -->
+    <footer class="bg-gray-900 text-white py-12 fade-in">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p>&copy; {{ date('Y') }} Font Share. All rights reserved.</p>
-            <div class="mt-2 space-x-4">
-                <a href="/about" class="hover:text-indigo-400">About us</a>
-                <a href="/contact" class="hover:text-indigo-400">Contact us</a>
+            <p>&copy; {{ date('Y') }} Scratchy Nib. All rights reserved.</p>
+            <div class="mt-4 space-x-6">
+                <a href="/about" class="hover:text-indigo-400 transition-colors font-medium">About us</a>
+                <a href="/contact" class="hover:text-indigo-400 transition-colors font-medium">Contact us</a>
             </div>
         </div>
     </footer>
 
-    <!-- Scrolling ticker -->
+    <!-- Scrolling ticker (fixed at bottom) -->
     <div class="fixed bottom-0 left-0 right-0 bg-indigo-600 text-white text-sm py-2 overflow-hidden z-50">
         <div class="animate-marquee whitespace-nowrap">
             <span id="ticker">
                 {{ now()->format('l, d F Y H:i:s') }} • Location: Hanoi, Vietnam • 
-                Welcome to Font Share • Share • Discover • Rate fonts
+                Welcome to Scratchy Nib 
             </span>
         </div>
     </div>
@@ -115,7 +130,7 @@
                 hour12: false
             });
             document.getElementById('ticker').textContent = 
-                now + ' • Location: Hanoi, Vietnam • Welcome to Font Share • Share • Discover • Rate fonts';
+                now + ' • Location: Hanoi, Vietnam • Welcome to Scratchy Nib ';
         }
         setInterval(updateTicker, 1000);
         updateTicker();
@@ -133,7 +148,7 @@
             animation: marquee 30s linear infinite;
         }
         @keyframes marquee {
-            0% { transform: translateX(100%); }
+            0%   { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
         }
     </style>

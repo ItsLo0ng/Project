@@ -8,7 +8,7 @@
             <h1 class="text-3xl font-bold text-gray-900">My Fonts</h1>
             <a href="{{ route('fonts.create') }}"
                class="mt-4 sm:mt-0 px-6 py-3 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition">
-                Upload New Font
+                Upload New Font  
             </a>
         </div>
         <div>

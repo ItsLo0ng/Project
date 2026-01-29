@@ -81,7 +81,7 @@
                     <!-- Submit -->
                     <div class="pt-6">
                         <button type="submit"
-                                class="w-full bg-indigo-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-indigo-700 transition">
+                                class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-4 rounded-xl font-semibold text-lg hover:from-indigo-600 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg">
                             Save Changes
                         </button>
                     </div>

@@ -91,3 +91,7 @@ Route::group(['prefix' => config('backpack.base.route_prefix'), 'middleware' => 
     Route::delete('font/{font}/image/{image}', [FontCrudController::class, 'deleteImage'])->name('admin.font.image.delete');
     Route::delete('font/{font}/file/{file}', [FontCrudController::class, 'deleteFile'])->name('admin.font.file.delete');
 });
+
+
+// Full feedback list for a font
+Route::get('/fonts/{font}/feedbacks', [FontController::class, 'feedbacks'])->name('fonts.feedbacks');
