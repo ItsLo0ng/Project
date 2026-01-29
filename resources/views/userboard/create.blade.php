@@ -79,16 +79,6 @@
                                   placeholder="Tell us about your font...">{{ old('description') }}</textarea>
                     </div>
 
-                    {{-- <!-- Date Added -->
-                    <div>
-                        <label for="date_added" class="block text-sm font-medium text-gray-700 mb-2">Date Added *</label>
-                        <input type="date" name="date_added" id="date_added" required
-                               value="{{ old('date_added', now()->format('Y-m-d')) }}"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition">
-                        @error('date_added')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div> --}}
 
                     <!-- Images -->
                     <div>
